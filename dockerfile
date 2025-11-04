@@ -1,13 +1,15 @@
-FROM python:3.7-slim
+FROM python:3.11-slim
 
 ENV debian_frontend=noninteractive
 
 WORKDIR /code
-COPY scripts/start.sh /tmp/start.sh
+COPY host_scripts/start.sh /tmp/start.sh
 
 RUN apt update && \
     apt install -y curl jq && \
     chmod u+x /tmp/start.sh && \
-    echo "swen-lab4-server" > /etc/hostname
+    echo "swen-lab-l5-server" > /etc/hostname
+
+RUN pip3 install black
 
 ENTRYPOINT ["/tmp/start.sh" ]
