@@ -10,13 +10,15 @@
 
 <body>
     <h1>Welcome to SWEN 2003</h1>
+    <div>My name is Lamar and this is my Lab project.</div></br>
+    <div>What is your name?</div></br>
     <div id="main">
-        <div>Hello, SWEN2003</div>
-        <!-- TODO - Add code changes for step 2 here-->
         <div>
+            <input type="text" id="name" placeholder="Enter your name">
+            <button id="send">Send</button>
             <div id="response" hidden>
-                <p></p>
-                <p></p>
+                <p id="name"></p>
+                <p id="send"></p>
             </div>
             <script type="module">
                 const input = document.getElementById('send');
