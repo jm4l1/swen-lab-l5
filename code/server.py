@@ -1,6 +1,8 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 import sys
+import time
+from datetime import datetime
 
 
 class handler(BaseHTTPRequestHandler):
@@ -30,27 +32,33 @@ class handler(BaseHTTPRequestHandler):
         # set data
         message = {}
         message["response"] = "hello " + post_body["name"]
-        # TODO - add a date field to the response
-        #        try to present the time of your local timezone
+        message["date"] = datetime.now().strftime("%A %d. %B %Y")
 
         self.wfile.write(bytes(json.dumps(message), "utf8"))
 
     def do_PUT(self):
         # set response code
-        # TODO - Add the correct response to indicate that this method is not
-        #        allowed
-
+        self.send_response(200)
         # set headers
-        # TODO - Add the correct response content-type for the message below
-        self.send_header("content-type", "")
+        self.send_header("content-type", "text/html")
         self.end_headers()
 
         message = "<body><div>Method Not allowed </div><body>"
         self.wfile.write(bytes(message, "utf8"))
 
-    # TODO - implement handler for DELETE here
-    # def do_DELETE(self):
-    # pass
+    def do_DELETE(self):
+        # set response code
+        self.send_response(200)
+        # set headers
+        self.send_header("content-type", "application/json")
+        self.end_headers()
+
+        message = {}
+
+        message["response"] = "You cannot do that"
+
+        self.wfile.write(bytes(json.dumps(message), "utf8"))
+        pass
 
 
 if __name__ == "__main__":
@@ -59,6 +67,6 @@ if __name__ == "__main__":
         exit(1)
 
     port = int(sys.argv[1])
-    with HTTPServer(("",), port) as server:
-        # TODO -  add log to say server is running
+    with HTTPServer(("", port), handler) as server:
+        print("Server is running on port " + str(port))
         server.serve_forever()
