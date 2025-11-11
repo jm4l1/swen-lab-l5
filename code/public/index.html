@@ -5,14 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>SWEN 20003</title>
+    <title>SWEN 2003</title>
 </head>
 
 <body>
     <h1>Welcome to SWEN 2003</h1>
     <div id="main">
         <div>Hello, SWEN2003</div>
-        <!-- TODO - Add code changes for step 2 here-->
+        <p>What is your name? </p>
+        <form>
+            <input type="text" id="name">
+            <button type="button" id="send">Send</button>
+        </form>
         <div>
             <div id="response" hidden>
                 <p></p>
@@ -25,22 +29,34 @@
                 const firstParagraph = document.querySelector('#response p:first-of-type');
                 const lastParagraph = document.querySelector('#response p:last-of-type');
 
-                input.addEventListener('click', async () => {
-                    const name = nameField.value;
+                input.addEventListener('click', async (event) => {
+                    event.preventDefault(); // Prevent default form submission
+                    const name = nameField.value.trim();
                     if (!name) {
+                        alert("Please enter your name.");
                         return;
                     }
                     try {
                         responseDiv.removeAttribute('hidden');
-                        const response = await fetch('http://localhost:8080', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name }) });
-                        const body = await response.json()
+                        const response = await fetch('http://localhost:8080', {
+                            method: 'POST',
+                            headers: { 'content-type': 'application/json' },
+                            body: JSON.stringify({ name })
+                        });
+                        if (!response.ok) {
+                            throw new Error(`Server error: ${response.status}`);
+                        }
+                        const body = await response.json();
                         firstParagraph.innerText = body.response;
                         lastParagraph.innerText = body.date ? `Today is ${body.date}` : '';
                     } catch (err) {
-
+                        console.error("Error:", err);
+                        alert("An error occurred while sending the request. Please try again.");
                     }
-                })
+                });
             </script>
+        </div>
+    </div>
 </body>
 
 </html>

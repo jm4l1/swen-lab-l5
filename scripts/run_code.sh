@@ -29,7 +29,7 @@ fi
 
 
 run_code() {
-    docker compose exec server python3 server-answers.py $1
+    docker compose exec server python3 server.py $1
 }
 
 if check_host1_running; then
